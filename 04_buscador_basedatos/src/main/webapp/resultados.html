@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:each="it:${listado}">
+		<h2><a th:href="${it.url}" th:text="${it.url}"></a></h2>
+		<h3 th:text="${it.descripcion}"></h3>
+		<hr>
+	</div>
+	<br>
+	<center>
+		<a href="menu">Volver</a>
+	</center>
+	
+</body>
+</html>
