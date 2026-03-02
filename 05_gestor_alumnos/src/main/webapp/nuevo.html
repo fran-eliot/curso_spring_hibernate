@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<center>
+	   <form action="alta" method="post">
+	   		Nombre:<input type="text" name="nombre"><br>
+	   		<label for="cursos">Seleccione curso:</label>
+	        <select name="curso" id="cursos">
+			    <th:block th:each="c : ${cursos}">
+			        <option th:value="${c}" 
+			                th:text="${c}" 
+			                th:selected="${c == cursoSeleccionado}">
+			        </option>
+			    </th:block>
+			</select><br>
+	   		Email:<input type="text" name="email"><br>
+			Nota:<input type="text" name="nota"><br><br>
+	   		<input type="submit" value="Guardar">
+	   </form>
+	</center>
+
+</body>
+</html>

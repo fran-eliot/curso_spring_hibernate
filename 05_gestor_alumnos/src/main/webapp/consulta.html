@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+    <center>
+	    <form action="alumnosCurso" method="get">
+	        <label for="cursos">Seleccione curso:</label>
+	        <select name="curso" id="cursos">
+			    <th:block th:each="c : ${cursos}">
+			        <option th:value="${c}" 
+			                th:text="${c}" 
+			                th:selected="${c == cursoSeleccionado}">
+			        </option>
+			    </th:block>
+			</select>
+	        <button type="submit">Ver alumnos</button>   
+	    </form>
+	
+	    <br><hr><br>
+	
+	    <table border="1" th:if="${alumnos != null and !alumnos.isEmpty()}">
+	        <thead>
+	            <tr>
+	                <th>Nombre</th>
+	                <th>Email</th>
+	                <th>Nota</th>
+	                <th>Curso</th>
+	                <th>Eliminar</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr th:each="a : ${alumnos}">
+	                <td th:text="${a.nombre}"></td>
+	                <td th:text="${a.email}"></td>
+	                <td th:text="${a.nota}"></td>
+	                <td th:text="${a.curso}"></td>
+	                <td>
+                        <form th:action="@{/eliminar}" method="post">
+				            <input type="hidden" name="nombre" th:value="${a.nombre}">
+				            <input type="hidden" name="curso" th:value="${a.curso}">
+				            
+				            <button type="submit" onclick="return confirm('¿Eliminar alumno?')">
+				                Eliminar
+				            </button>
+       					 </form>
+	            </tr>
+	        </tbody>
+	    </table>
+	    
+	    <h3 th:if="${alumnos != null and alumnos.isEmpty()}">
+	        No hay alumnos matriculados en este curso.
+	    </h3>
+	
+	    <br>
+	    <a href="goMenu">Volver al menú</a>
+	</center>
+
+
+</body>
+</html>
