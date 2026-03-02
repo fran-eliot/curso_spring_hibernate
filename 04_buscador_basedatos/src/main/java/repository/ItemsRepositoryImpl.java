@@ -35,7 +35,8 @@ public class ItemsRepositoryImpl implements ItemsRepository {
 		String jpql = "select i from Item i where i.url=?1";
 		TypedQuery<Item> query=eManager.createQuery(jpql,Item.class);
 		query.setParameter(1, url);
-		return query.getResultList().get(0);
+		List<Item> resultado=query.getResultList();
+		return resultado.size()>0?resultado.get(0):null;
 	}
 
 }
