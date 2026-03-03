@@ -11,5 +11,8 @@ public interface AlumnosRepository {
 	Alumno findFirstByNombreAndCurso(String nombre,String curso);
 	List<String> findAllCursos();
 	boolean eliminarAlumno(String nombre, String curso);
-
+	void removeById(int idAlumno);
+	Alumno findById(int idAlumno);
+	void update(Alumno alumno);
+	double averageByCurso(String curso);
 }

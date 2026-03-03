@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import model.Alumno;
@@ -60,5 +61,34 @@ public class AlumnosRepositoryImpl implements AlumnosRepository {
 				.executeUpdate();
 		return filasEliminadas>0;
 	}
+	
+	@Transactional
+	@Override
+	public void removeById(int idAlumno) {
+		String jpql = "delete from Alumno a where a.id=?1";
+		Query query = eManager.createQuery(jpql);
+		query.setParameter(1, idAlumno);
+		query.executeUpdate();
+	}
+	
+	@Override
+	public Alumno findById(int idAlumno) {
+		return eManager.find(Alumno.class, idAlumno);
+	}
+	
+	@Transactional
+	@Override
+	public void update(Alumno alumno) {
+		eManager.merge(alumno);
+	}
+
+	@Override
+	public double averageByCurso(String curso) {
+		String sql = "select avg(a.nota) from alumnos where a.curso=?";
+		Query query = eManager.createNativeQuery(sql, Double.class);
+		query.setParameter(1, curso);
+		return (double) query.getSingleResult();
+	}
+	
 
 }

@@ -40,5 +40,21 @@ public class AlumnosServiceImpl implements AlumnosService {
 		}
 		return false;
 	}
+	
+	@Override
+	public Alumno findById(int idAlumno) {
+		return alumnosRepository.findById(idAlumno);
+	}
+	
+	@Override
+	public void removeById(int idAlumno) {
+		alumnosRepository.removeById(idAlumno);
+	}
+	
+	@Override
+	public void update(Alumno alumno) {
+		alumnosRepository.update(alumno);
+	}
+	
 
 }

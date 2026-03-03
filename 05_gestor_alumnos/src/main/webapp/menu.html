@@ -1,15 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title> 
+    <meta charset="UTF-8">
+    <title>Panel de Control - Alumnos</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .menu-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 { color: var(--primary-color); margin-bottom: 2rem; }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-menu {
+            text-decoration: none;
+            color: white;
+            background-color: var(--accent-color);
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .btn-menu:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-color);
+        }
+    </style>
 </head>
 <body>
 
-	<center>
-		<h2><a href="goConsulta">Consultar</a></h2>
-		<h2><a href="goNuevo">Nuevo Alumno</a></h2>
-	</center>
+    <div class="menu-container">
+        <h1>Gestión Académica</h1>
+        
+        <nav class="nav-links">
+            <a th:href="@{/goConsulta}" class="btn-menu">🔍 Consultar Alumnos</a>
+            <a th:href="@{/goNuevo}" class="btn-menu btn-secondary">➕ Registrar Nuevo</a>
+        </nav>
+        
+        <p style="margin-top: 2rem; font-size: 0.8rem; color: #7f8c8d;">
+            Sistema de Gestión Interna v1.0
+        </p>
+    </div>
 
 </body>
 </html>
