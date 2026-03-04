@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Alumno</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f4f7f6;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group strong {
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"] {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .link-cancel {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .link-cancel:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Editar Alumno</h1>
+        
+        <form th:action="@{/update}" method="post">
+            <input type="hidden" name="idAlumno" th:value="${alumno.idAlumno}">
+
+            <div class="form-group">
+                <strong>Nombre Completo</strong> 
+                <input type="text" name="nombre" th:value="${alumno.nombre}" required>
+            </div>
+
+            <div class="form-group">
+                <strong>Correo Electrónico</strong> 
+                <input type="email" name="email" th:value="${alumno.email}" required>
+            </div>
+
+            <div class="form-group">
+                <strong>Calificación (Nota)</strong> 
+                <input type="number" step="0.1" min="0" max="10" name="nota" th:value="${alumno.nota}" required>
+            </div>
+
+            <div class="form-group">
+                <strong>Curso</strong> 
+                <input type="text" name="curso" th:value="${alumno.curso}" required>
+            </div>
+
+            <button type="submit">Actualizar Datos</button>
+            
+            <a th:href="@{/goConsulta}" class="link-cancel">Cancelar y volver</a>
+        </form>
+    </div>
+
+</body>
+</html>

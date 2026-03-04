@@ -1,0 +1,5 @@
+Java Básico:
+https://www.udemy.com/course/aprende-a-programar-en-java/?couponCode=F46747AC6CDA691EB5BC
+
+POO:
+https://www.udemy.com/course/programacion-orientada-a-objetos-con-java-b/?couponCode=0B87E9A0CED95A9698C1

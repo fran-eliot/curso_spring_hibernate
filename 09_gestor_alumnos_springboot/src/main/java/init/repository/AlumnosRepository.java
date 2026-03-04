@@ -1,0 +1,18 @@
+package init.repository;
+
+import java.util.List;
+
+import init.model.Alumno;
+
+public interface AlumnosRepository {
+	
+	void save(Alumno alumno);
+	List<Alumno> findByCurso(String curso);
+	Alumno findFirstByNombreAndCurso(String nombre,String curso);
+	List<String> findAllCursos();
+	boolean eliminarAlumno(String nombre, String curso);
+	void removeById(int idAlumno);
+	Alumno findById(int idAlumno);
+	void update(Alumno alumno);
+	double averageByCurso(String curso);
+}
