@@ -109,3 +109,20 @@ a {
 }
 
 a:hover { text-decoration: underline; }
+
+
+.cart-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #fcf3cf;
+    border-radius: 8px;
+    border: 1px solid #f39c12;
+}
+.cart-section h2 {
+    color: #e67e22;
+    margin-top: 0;
+}
+.total-row {
+    font-weight: bold;
+    background-color: #eee;
+}

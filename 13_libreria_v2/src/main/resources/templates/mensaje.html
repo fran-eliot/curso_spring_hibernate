@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notificación</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="message-box">
+            <h2 th:text="${mensaje}">Mensaje de sistema</h2>
+        </div>
+        <br>
+        <a href="irLogin" class="back-link">Volver al Login</a>
+    </div>
+</body>
+</html>

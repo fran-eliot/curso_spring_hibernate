@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Libros</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Catálogo de Libros</h1>
+        
+        <div class="filter-section">
+            <form th:action="@{/librosTema}" method="get">
+                <label for="temas">Tema:</label>
+                <select name="tema" id="temas">
+                    <option value="" th:disabled="${temaSeleccionado != null}">Seleccione...</option>
+                    <option value="" th:selected="${temaSeleccionado == 'Todos'}">Todos</option>
+                    <option th:each="t : ${temas}" 
+                            th:value="${t}" 
+                            th:text="${t}" 
+                            th:selected="${t == temaSeleccionado}">
+                    </option>
+                </select>
+                <input type="submit" value="Filtrar">
+            </form>
+        </div>
+
+        <table th:if="${libros != null and !libros.isEmpty()}">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Precio</th>
+                    <th>Páginas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="l : ${libros}">
+                    <td th:text="${l.titulo}" style="font-weight: 600;"></td>
+                    <td th:text="${l.autor}"></td>
+                    <td th:text="${l.precio} + '€'"></td>
+                    <td th:text="${l.paginas}"></td>
+                    <td>
+                        <div class="actions-div">
+						    <form th:action="@{/editar}" method="get">
+						        <input type="hidden" name="isbn" th:value="${l.isbn}">
+						        <input type="hidden" name="tema" th:value="${temaSeleccionado}"> <button type="submit" class="btn-edit">Editar</button>
+						    </form>
+						
+						    <form th:action="@{/eliminar}" method="post">
+						        <input type="hidden" name="isbn" th:value="${l.isbn}">
+						        <input type="hidden" name="tema" th:value="${temaSeleccionado}"> <button type="submit" class="btn-delete" 
+						                onclick="return confirm('¿Estás seguro?')">Eliminar</button>
+						    </form>
+						</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="empty-msg" th:if="${libros != null and libros.isEmpty()}">
+            <p>⚠️ No se encontraron libros de ese tema.</p>
+        </div>
+    
+        <hr>
+        <p><a th:href="@{/irLogin}">← Volver al panel principal</a></p>
+    </div> 
+</body>
+</html>
