@@ -1,0 +1,128 @@
+@charset "UTF-8";
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f5f7fa;
+    --text-color: #333;
+    --error-color: #e74c3c;
+    --success-color: #27ae60;
+    --border-radius: 8px;
+    --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem 1rem;
+}
+
+.container {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 800px; /* Ancho para tablas */
+    text-align: center;
+}
+
+/* Para formularios como Login/Registro/Editar */
+.container-narrow {
+    max-width: 400px;
+}
+
+h1 {
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+label, strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+input, select {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+input[type="submit"], button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.btn-edit { background-color: var(--success-color); }
+.btn-delete { background-color: var(--error-color); }
+
+/* Tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+th {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+}
+
+.actions-div {
+    display: flex;
+    gap: 5px;
+}
+
+.actions-div form { margin: 0; }
+.actions-div button { padding: 5px 10px; font-size: 0.8rem; }
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+a:hover { text-decoration: underline; }
+
+
+.cart-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #fcf3cf;
+    border-radius: 8px;
+    border: 1px solid #f39c12;
+}
+.cart-section h2 {
+    color: #e67e22;
+    margin-top: 0;
+}
+.total-row {
+    font-weight: bold;
+    background-color: #eee;
+}

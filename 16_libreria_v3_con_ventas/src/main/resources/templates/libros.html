@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Libros</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Librería Online</h1>
+        
+        <div class="filter-section">
+            <form th:action="@{/librosTema}" method="get" style="flex-direction: row; align-items: center; gap: 10px;">
+                <label><strong>Filtrar por Tema:</strong></label>
+                <select name="tema">
+                    <option value="Todos" th:selected="${temaSeleccionado == 'Todos'}">Todos los temas</option>
+                    <option th:each="t : ${temas}" 
+                            th:value="${t}" 
+                            th:text="${t}" 
+                            th:selected="${t == temaSeleccionado}">
+                    </option>
+                </select>
+                <button type="submit" class="btn-view">Aplicar Filtro</button>
+            </form>
+        </div>
+
+		<div th:if="${libros != null and !libros.isEmpty()}">
+			<h2 class="section-title">📚 Catálogo de Libros</h2>
+	        <table th:if="${libros != null and !libros.isEmpty()}">
+	            <thead>
+	                <tr>
+	                    <th>Título</th>
+	                    <th>Autor</th>
+	                    <th>Precio</th>
+	                    <th>Páginas</th>
+	                    <th>Tema</th>
+	                    <th>Acciones</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr th:each="l : ${libros}">
+	                    <td th:text="${l.titulo}" style="font-weight: 600;"></td>
+	                    <td th:text="${l.autor}"></td>
+	                    <td th:text="${l.precio} + '€'"></td>
+	                    <td th:text="${l.paginas}"></td>
+	                    <td th:text="${l.nombreTema}"></td>
+	                    <td>
+	                        <div class="actions-div">
+	                            <form th:action="@{/agregarCarrito}" method="post">
+	                                <input type="hidden" name="isbn" th:value="${l.isbn}">
+	                                <input type="hidden" name="tema" th:value="${temaSeleccionado}">
+	                                <button type="submit" class="btn-buy">🛒 Comprar</button>
+	                            </form>
+	
+	                            <form th:action="@{/editar}" method="get">
+	                                <input type="hidden" name="isbn" th:value="${l.isbn}">
+	                                <input type="hidden" name="tema" th:value="${temaSeleccionado}">
+	                                <button type="submit" class="btn-edit">Editar</button>
+	                            </form>
+	                        
+	                            <form th:action="@{/eliminar}" method="post">
+	                                <input type="hidden" name="isbn" th:value="${l.isbn}">
+	                                <input type="hidden" name="tema" th:value="${temaSeleccionado}">
+	                                <button type="submit" class="btn-delete" 
+	                                        onclick="return confirm('¿Eliminar este libro del catálogo?')">Borrar</button>
+	                            </form>
+	                        </div>
+	                    </td>
+	                </tr>
+	            </tbody>
+	        </table>
+	
+	        <div class="empty-msg" th:if="${libros != null and libros.isEmpty()}">
+	            <p>No hay libros en esta categoría.</p>
+	        </div>
+		
+		</div>
+        
+
+        <div th:if="${carrito != null and !carrito.isEmpty()}">
+		    <h2 class="section-title cart-title">🛒 Tu Carrito de la Compra</h2>
+		    <table>
+		        <thead>
+		            <tr>
+		                <th>Título</th>
+		                <th>Autor</th>
+		                <th>Precio</th>
+		                <th>Páginas</th> <th>Acciones</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr th:each="c, iterStat : ${carrito}">
+		                <td th:text="${c.titulo}"></td>
+		                <td th:text="${c.autor}"></td>
+		                <td th:text="${c.precio} + '€'"></td>
+		                <td th:text="${c.paginas}"></td>
+		                <td>
+		                    <div class="actions-div">
+		                        <form th:action="@{/eliminarCarrito}" method="post">
+		                            <input type="hidden" name="posicion" th:value="${iterStat.index}">
+		                            <input type="hidden" name="tema" th:value="${temaSeleccionado}">
+		                            <button type="submit" class="btn-delete">❌ Quitar</button>
+		                        </form>
+		                    </div>
+		                </td>
+		            </tr>
+		        </tbody>
+		        <tfoot>
+		            <tr class="total-row">
+		                <td colspan="4" style="text-align: right;">Total Libros en Carrito:</td>
+		                <td th:text="${carrito.size()}"></td>
+		            </tr>
+		        </tfoot>
+		    </table>
+		</div>
+
+        <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <a th:href="@{/irLogin}" class="link-back">← Cerrar Sesión</a>
+        </div>
+    </div> 
+</body>
+</html>
