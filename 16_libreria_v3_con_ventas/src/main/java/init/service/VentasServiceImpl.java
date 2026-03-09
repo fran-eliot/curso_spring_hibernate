@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import init.dtos.LibroDto;
 import init.mappers.Mapeador;
@@ -12,6 +13,7 @@ import init.model.Venta;
 import init.repository.ClientesRepository;
 import init.repository.VentasRepository;
 
+@Service
 public class VentasServiceImpl implements VentasService {
 	
 	@Autowired

@@ -93,9 +93,11 @@ public class LibreriaController {
 
 	@GetMapping("/editar")
 	public String editar(Model model, @RequestParam("isbn") int isbn, @RequestParam("tema") String tema) {
-	    LibroDto libro = libreriaService.getLibroDtoByIsbn(isbn);
+		LibroDto libro = libreriaService.getLibroDtoByIsbn(isbn);
 	    model.addAttribute("libro", libro);
-	    model.addAttribute("temaAnterior", tema); // Pasamos el tema a la vista de edición
+	    model.addAttribute("temaAnterior", tema); 
+	    // Añadimos esto para llenar el desplegable en la vista de edición
+	    model.addAttribute("temas", libreriaService.getTemasConLibros()); 
 	    return "editar";
 	}
 
@@ -130,16 +132,17 @@ public class LibreriaController {
 	    carrito.add(libreriaService.getLibroDtoByIsbn(isbn));
 	    sesion.setAttribute("carrito", carrito);
 
-	    // 2. Filtrar libros para no perder la vista actual
+	    // 2. Filtrar libros para mantener la vista actual (Lógica idéntica a librosTema)
 	    List<LibroDto> libros = (tema == null || tema.isEmpty() || tema.equals("Todos")) 
-                ? libreriaService.getLibros().stream().map(libro -> libreriaService.getLibroDtoByIsbn(libro.getIsbn())).toList()
-               		 	                         : libreriaService.getLibrosByTema(tema).stream().map(libro -> libreriaService.getLibroDtoByIsbn(libro.getIsbn())).toList();
+	            ? libreriaService.getLibros().stream().map(l -> libreriaService.getLibroDtoByIsbn(l.getIsbn())).toList()
+	            : libreriaService.getLibrosByTema(tema).stream().map(l -> libreriaService.getLibroDtoByIsbn(l.getIsbn())).toList();
 
-	    // 3. ENVIAR TODO AL MODELO (Esto es lo que te faltaba)
+	    // 3. ENVIAR AL MODELO
 	    model.addAttribute("libros", libros);
-	    model.addAttribute("temas", libreriaService.getTemas()); // Imprescindible para el select
+	    // CAMBIO AQUÍ: Usar getTemasConLibros() para que el objeto tenga la propiedad .tema
+	    model.addAttribute("temas", libreriaService.getTemasConLibros()); 
 	    model.addAttribute("temaSeleccionado", tema);
-	    model.addAttribute("carrito", carrito); // Enviamos el carrito para que se vea
+	    model.addAttribute("carrito", carrito);
 	    
 	    return "libros";
 	}
@@ -156,7 +159,7 @@ public class LibreriaController {
 
 		// 3. ENVIAR TODO AL MODELO (Esto es lo que te faltaba)
 		model.addAttribute("libros", libros);
-		model.addAttribute("temas", libreriaService.getTemas()); // Imprescindible para el select
+		model.addAttribute("temas", libreriaService.getTemasConLibros()); // Imprescindible para el select
 		model.addAttribute("temaSeleccionado", tema);
 		model.addAttribute("carrito", carrito); // Enviamos el carrito para que se vea
 	    return "libros"; // Redirige a la página página de libros después de eliminar del carrito

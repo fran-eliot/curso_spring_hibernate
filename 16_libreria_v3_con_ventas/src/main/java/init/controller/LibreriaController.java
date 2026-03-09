@@ -37,7 +37,7 @@ public class LibreriaController {
 
 		ClienteDto cliente = clientesService.autenticarUsuario(usuario, password);
 		if (cliente != null) {
-			sesion.setAttribute("usuario", cliente);
+			sesion.setAttribute("cliente", cliente);
 			model.addAttribute("temas", libreriaService.getTemasConLibros());
 			return "libros";
 		} else {
@@ -48,8 +48,9 @@ public class LibreriaController {
 	}
 	
 	@PostMapping("/registro")
-	public String registro(Model model, @RequestParam("cliente") ClienteDto nuevoCliente) {
-		
+	public String registro(Model model, @RequestParam("usuario") String usuario, @RequestParam("password") String password,
+			@RequestParam("email") String email, @RequestParam("telefono") int telefono) {
+		ClienteDto nuevoCliente = new ClienteDto(usuario, password, email, telefono);
 		if (clientesService.guardarCliente(nuevoCliente)) {
 			
 			return "login";
@@ -96,24 +97,29 @@ public class LibreriaController {
 
 	@GetMapping("/editar")
 	public String editar(Model model, @RequestParam("isbn") int isbn, @RequestParam("tema") String tema) {
-	    LibroDto libro = libreriaService.getLibroDtoByIsbn(isbn);
+		LibroDto libro = libreriaService.getLibroDtoByIsbn(isbn);
 	    model.addAttribute("libro", libro);
-	    model.addAttribute("temaAnterior", tema); // Pasamos el tema a la vista de edición
+	    model.addAttribute("temaAnterior", tema); 
+	    // Añadimos esto para llenar el desplegable en la vista de edición
+	    model.addAttribute("temas", libreriaService.getTemasConLibros()); 
 	    return "editar";
 	}
 
 	@PostMapping("/update")
-	public String update(Model model, @ModelAttribute LibroDto libro, @RequestParam("temaAnterior") String tema) {
-	    libreriaService.actualizaLibro(libreriaService.getLibroDtoByIsbn(libro.getIsbn()));
+	public String update(Model model, @ModelAttribute LibroDto libroDto, @RequestParam("temaAnterior") String tema, HttpSession sesion) {
+	    // 1. IMPORTANTE: Usamos el DTO que viene del formulario, no volvemos a consultar el viejo
+		
+	    libreriaService.actualizaLibro(libroDto); 
 	    
-	    // Al volver, filtramos por el tema que guardamos antes de editar
+	    // 2. Corregir el Stream: usar 'lib' (la variable de la lambda) no 'libro'
 	    List<LibroDto> libros = (tema == null || tema.isEmpty() || tema.equals("Todos")) 
-                ? libreriaService.getLibros().stream().map(lib -> libreriaService.getLibroDtoByIsbn(libro.getIsbn())).toList()
-               		 	                         : libreriaService.getLibrosByTema(tema).stream().map(lib -> libreriaService.getLibroDtoByIsbn(libro.getIsbn())).toList();
+	            ? libreriaService.getLibros().stream().map(lib -> libreriaService.getLibroDtoByIsbn(lib.getIsbn())).toList()
+	            : libreriaService.getLibrosByTema(tema).stream().map(lib -> libreriaService.getLibroDtoByIsbn(lib.getIsbn())).toList();
 	    
 	    model.addAttribute("libros", libros);
-	    model.addAttribute("temas", libreriaService.getTemas());
+	    model.addAttribute("temas", libreriaService.getTemasConLibros()); // Usa temas con libros para ser consistente
 	    model.addAttribute("temaSeleccionado", tema);
+	    model.addAttribute("carrito", sesion.getAttribute("carrito"));
 	    return "libros";
 	}
 	
@@ -130,16 +136,17 @@ public class LibreriaController {
 	    carrito.add(libreriaService.getLibroDtoByIsbn(isbn));
 	    sesion.setAttribute("carrito", carrito);
 
-	    // 2. Filtrar libros para no perder la vista actual
+	    // 2. Filtrar libros para mantener la vista actual (Lógica idéntica a librosTema)
 	    List<LibroDto> libros = (tema == null || tema.isEmpty() || tema.equals("Todos")) 
-                ? libreriaService.getLibros().stream().map(libro -> libreriaService.getLibroDtoByIsbn(libro.getIsbn())).toList()
-               		 	                         : libreriaService.getLibrosByTema(tema).stream().map(libro -> libreriaService.getLibroDtoByIsbn(libro.getIsbn())).toList();
+	            ? libreriaService.getLibros().stream().map(l -> libreriaService.getLibroDtoByIsbn(l.getIsbn())).toList()
+	            : libreriaService.getLibrosByTema(tema).stream().map(l -> libreriaService.getLibroDtoByIsbn(l.getIsbn())).toList();
 
-	    // 3. ENVIAR TODO AL MODELO (Esto es lo que te faltaba)
+	    // 3. ENVIAR AL MODELO
 	    model.addAttribute("libros", libros);
-	    model.addAttribute("temas", libreriaService.getTemas()); // Imprescindible para el select
+	    // CAMBIO AQUÍ: Usar getTemasConLibros() para que el objeto tenga la propiedad .tema
+	    model.addAttribute("temas", libreriaService.getTemasConLibros()); 
 	    model.addAttribute("temaSeleccionado", tema);
-	    model.addAttribute("carrito", carrito); // Enviamos el carrito para que se vea
+	    model.addAttribute("carrito", carrito);
 	    
 	    return "libros";
 	}
@@ -156,35 +163,33 @@ public class LibreriaController {
 
 		// 3. ENVIAR TODO AL MODELO (Esto es lo que te faltaba)
 		model.addAttribute("libros", libros);
-		model.addAttribute("temas", libreriaService.getTemas()); // Imprescindible para el select
+		model.addAttribute("temas", libreriaService.getTemasConLibros()); // Imprescindible para el select
 		model.addAttribute("temaSeleccionado", tema);
 		model.addAttribute("carrito", carrito); // Enviamos el carrito para que se vea
 	    return "libros"; // Redirige a la página página de libros después de eliminar del carrito
 	}
 	
 	@PostMapping("/comprar")
-	public String comprar(Model model, HttpSession sesion, @RequestParam("tema") String tema) {
+	public String comprar(HttpSession sesion, Model model) {
+	    ClienteDto cliente = (ClienteDto) sesion.getAttribute("cliente");
 	    List<LibroDto> carrito = (List<LibroDto>) sesion.getAttribute("carrito");
-	    if (carrito != null && !carrito.isEmpty()) {
-	        ClienteDto usuario = (ClienteDto) sesion.getAttribute("usuario");
-	        int idCliente = usuario.getIdCliente();
-	        ventasService.nuevaVenta(idCliente, carrito);
-	        sesion.removeAttribute("carrito"); // Vaciar el carrito después de la compra
-	        sesion.invalidate(); // Cerrar sesión después de la compra
-	        model.addAttribute("mensaje", "Compra realizada con éxito");
+	   
+	    if (cliente != null && carrito != null && !carrito.isEmpty()) {
+	    	
+	    	
+	    	// Ejecutamos la lógica de persistencia
+	    	ventasService.nuevaVenta(cliente.getIdCliente(), carrito);
+	        
+	        // Vaciamos el carrito tras la compra exitosa
+	        sesion.setAttribute("carrito", new ArrayList<LibroDto>());
+	        
+	        model.addAttribute("mensaje", "¡Compra realizada con éxito! Gracias por su confianza.");
 	    } else {
-	        model.addAttribute("mensaje", "El carrito está vacío. Agrega libros antes de comprar.");
+	        model.addAttribute("mensaje", "Error al procesar la compra. El carrito está vacío o no se ha identificado el usuario.");
 	    }
-	    return "mensaje"; // Redirige a una página de mensaje después de la compra
+	    
+	    return "mensaje";
 	}
 	
-//	@GetMapping("/informe")
-//	public String informe(@RequestParam LocalDateTime fechaInicio, @RequestParam LocalDateTime fechaFin, Model model) {
-//		System.out.println("Fecha Inicio: " + fechaInicio);
-//		System.out.println("Fecha Fin: " + fechaFin);
-//	    List<VentaDto> ventas = ventasService.getVentasEntreFechas(fechaInicio, fechaFin);
-//	    model.addAttribute("ventas", ventas);
-//	    return "informe";
-//	}
 
 }

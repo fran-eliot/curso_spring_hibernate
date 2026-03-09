@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div class="container">
+	    <h1>Informe de Ventas</h1>
+	    
+	    <form action="ventas" method="get">
+	        <label>Desde:</label>
+	        <input type="datetime-local" name="fecha1" required>
+	        
+	        <label>Hasta:</label>
+	        <input type="datetime-local" name="fecha2" required>
+	        
+	        <button type="submit">Generar Informe</button>
+	    </form>
+	
+	    <hr>
+	
+	    <table th:if="${ventas != null}">
+	        <thead>
+	            <tr>
+	                <th>Fecha</th>
+	                <th>Cliente</th>
+	                <th>Libro (ISBN)</th>
+	                <th>Precio</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr th:each="v : ${ventas}">
+	                <td th:text="${#temporals.format(v.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+	                <td th:text="${v.cliente.usuario}"></td>
+	                <td th:text="${v.libro.titulo}"></td>
+	                <td th:text="${v.libro.precio} + '€'"></td>
+	            </tr>
+	        </tbody>
+	    </table>
+	    
+	    <p><a th:href="@{/menu}">Volver al menú</a></p>
+	</div>
+
+</body>
+</html>

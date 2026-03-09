@@ -29,10 +29,6 @@ public class Mapeador {
 		return new Tema(temaDto.getTema(), null);
 	}
 	
-	public Tema temaDtoToEntityConId(TemaDto temaDto) {
-		return new Tema(temaDto.getIdTema(), temaDto.getTema(), null);
-	}
-	
 	public Libro libroDtoToEntity(init.dtos.LibroDto libroDto) {
 		return new Libro(libroDto.getIsbn(), libroDto.getTitulo(), libroDto.getAutor(), libroDto.getPrecio(), libroDto.getPaginas());
 	}

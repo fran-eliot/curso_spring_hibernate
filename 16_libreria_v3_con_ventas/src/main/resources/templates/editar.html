@@ -24,9 +24,15 @@
             <label>Páginas</label>
             <input type="number" name="paginas" th:value="${libro.paginas}" required>
             
-            <label>ID Tema</label>
-            <input type="number" name="idTema" th:value="${libro.idTema}" required>
-
+            <label>Tema</label>
+            <select name="nombreTema" required>
+			    <option th:each="t : ${temas}" 
+			            th:value="${t.tema}" 
+			            th:text="${t.tema}" 
+			            th:selected="${t.tema == libro.nombreTema}">
+			    </option>
+			</select>
+            
             <button type="submit">Actualizar Datos</button>
             <p><a th:href="@{/librosTema(tema=${temaAnterior})}">← Cancelar y volver</a></p>
         </form>

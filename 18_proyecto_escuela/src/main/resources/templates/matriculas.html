@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<form th:action="@{/matriculas}" method="get" style="flex-direction: row; align-items: center; gap: 10px;">
+		<label><strong>Filtrar por Curso:</strong></label>
+	    <select name="curso">
+		    <option th:each="c : ${cursos}" 
+		            th:value="${c.codCurso}" 
+		            th:text="${c.denominacion}" 
+		            th:selected="${c == cursoSeleccionado}">
+		    </option>
+		</select>
+		 <button type="submit" class="btn-view">Aplicar Filtro</button>
+	</form>
+	
+	<table th:if="${alumnos != null and !alumnos.isEmpty()}">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Curso</th>
+                <th>Horario</th>
+                <th>Email</th>
+                <th>Duracion</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="a : ${alumnos}">
+                <td th:text="${a.nombre}" style="font-weight: 600;"></td>
+                <td th:text="${cursoSeleccionado.denominacion}"></td>
+                <td th:text="${cursoSeleccionado.horario} + '€'"></td>
+                <td th:text="${a.email}"></td>
+                <td th:text="${cursoSeleccionado.duracion}"></td>
+                
+            </tr>
+        </tbody>
+    </table>
+	
+
+</body>
+</html>
