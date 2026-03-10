@@ -202,14 +202,15 @@ public class LibreriaController {
 	}
 	
 	@GetMapping("/informeVentas")
-	public String informeVentas(HttpSession sesion, 
-			Model model, 
-			@RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaInicio, 
-			@RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaFin) {
-		List<VentaDto> ventas = ventasService.consultarVentas(fechaInicio, fechaFin);
+	public String informeVentas(
+	        @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaInicio, 
+	        @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaFin,
+	        Model model) {
+	    
+	    // Aquí NO uses parse. fechaInicio ya es un objeto LocalDateTime.
+	    List<VentaDto> ventas = ventasService.consultarVentas(fechaInicio, fechaFin);
 	    model.addAttribute("ventas", ventas);
 	    return "informe";
-	   
 	}
 
 

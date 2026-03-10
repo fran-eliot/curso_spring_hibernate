@@ -43,10 +43,15 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<VentaDto> consultarVentas(LocalDateTime f1, LocalDateTime f2) {
+		if (f1 == null || f2 == null) {
+	        return List.of(); 
+	    }
+
 	    return ventasRepository.findByFechaBetween(f1, f2)
 	            .stream()
-	            .map(v -> mapeador.ventaToDto(v)) // Asegúrate de tener este método en tu mapeador
+	            .map(mapeador::ventaEntityToDto) // Referencia a método, más limpio
 	            .toList();
 	}
+	
 
 }

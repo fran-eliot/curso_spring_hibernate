@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -7,41 +7,40 @@
 <body>
 
 	<div class="container">
-	    <h1>Informe de Ventas</h1>
-	    
-	    <form action="ventas" method="get">
-	        <label>Desde:</label>
-	        <input type="datetime-local" name="fecha1" required>
-	        
-	        <label>Hasta:</label>
-	        <input type="datetime-local" name="fecha2" required>
-	        
-	        <button type="submit">Generar Informe</button>
-	    </form>
-	
-	    <hr>
-	
-	    <table th:if="${ventas != null}">
-	        <thead>
-	            <tr>
-	                <th>Fecha</th>
-	                <th>Cliente</th>
-	                <th>Libro (ISBN)</th>
-	                <th>Precio</th>
-	            </tr>
-	        </thead>
-	        <tbody>
-	            <tr th:each="v : ${ventas}">
-	                <td th:text="${#temporals.format(v.fecha, 'dd/MM/yyyy HH:mm')}"></td>
-	                <td th:text="${v.cliente.usuario}"></td>
-	                <td th:text="${v.libro.titulo}"></td>
-	                <td th:text="${v.libro.precio} + '€'"></td>
-	            </tr>
-	        </tbody>
-	    </table>
-	    
-	    <p><a th:href="@{/menu}">Volver al menú</a></p>
-	</div>
+    <h2>Informe de Ventas</h2>
+    
+    <div class="filter-section">
+        <form th:action="@{/informeVentas}" method="get" class="filter-form">
+            <label>Desde:</label>
+            <input type="datetime-local" id="fechaInicio" name="fechaInicio" class="form-control" required>
+            
+            <label>Hasta:</label>
+            <input type="datetime-local" id="fechaFin" name="fechaFin" class="form-control" required>
+            
+            <button type="submit" class="btn-view">Generar Informe</button>
+        </form>
+    </div>
 
+    <div class="table-container">
+        <table th:if="${ventas != null and !ventas.isEmpty()}">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Libro</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="v : ${ventas}">
+                    <td th:text="${#temporals.format(v.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${v.cliente.usuario}" class="font-bold"></td>
+                    <td th:text="${v.libro.titulo}"></td>
+                    <td><span th:text="${v.libro.precio} + '€'" style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 6px;"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

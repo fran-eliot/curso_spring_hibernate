@@ -1,46 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Matrículas</title>
+    <link th:href="@{/css/estilos.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-	<form th:action="@{/matriculas}" method="get" style="flex-direction: row; align-items: center; gap: 10px;">
-		<label><strong>Filtrar por Curso:</strong></label>
-	    <select name="curso">
-		    <option th:each="c : ${cursos}" 
-		            th:value="${c.codCurso}" 
-		            th:text="${c.denominacion}" 
-		            th:selected="${c == cursoSeleccionado}">
-		    </option>
-		</select>
-		 <button type="submit" class="btn-view">Aplicar Filtro</button>
-	</form>
-	
-	<table th:if="${alumnos != null and !alumnos.isEmpty()}">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Curso</th>
-                <th>Horario</th>
-                <th>Email</th>
-                <th>Duracion</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="a : ${alumnos}">
-                <td th:text="${a.nombre}" style="font-weight: 600;"></td>
-                <td th:text="${cursoSeleccionado.denominacion}"></td>
-                <td th:text="${cursoSeleccionado.horario} + '€'"></td>
-                <td th:text="${a.email}"></td>
-                <td th:text="${cursoSeleccionado.duracion}"></td>
-                
-            </tr>
-        </tbody>
-    </table>
-	
+    <div class="container">
+        <h2>Panel de Gestión Académica</h2>
+        
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+		    <a th:href="@{/prepararMatricula}" class="btn-view" style="text-decoration: none; background-color: #10b981;">
+		        + Nueva Matrícula
+		    </a>
+		</div>
+
+        <div class="filter-section">
+            <form th:action="@{/matriculas}" method="get" class="filter-form">
+                <label for="codCurso"><strong>Curso Académico:</strong></label>
+                <select name="codCurso" id="codCurso">
+                    <option value="" disabled th:selected="${cursoSeleccionado == null}">— Seleccione un curso —</option>
+                    <option th:each="c : ${cursos}" 
+                            th:value="${c.codCurso}" 
+                            th:text="${c.nombreCurso}" 
+                            th:selected="${c.codCurso == cursoSeleccionado}">
+                    </option>
+                </select>
+                <button type="submit" class="btn-view">Actualizar Vista</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <table th:if="${matriculas != null and !matriculas.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>Alumno</th>
+                        <th>Asignatura</th>
+                        <th>Horario</th>
+                        <th>Email</th>
+                        <th>Duración</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="a : ${matriculas}">
+                        <td th:text="${a.alumno.nombre}" class="font-bold"></td>
+                        <td><span th:text="${a.curso.nombreCurso}"></span></td>
+                        <td th:text="${a.curso.horario} + ' €'"></td>
+                        <td th:text="${a.alumno.email}" style="color: #64748b;"></td>
+                        <td><span th:text="${a.curso.duracion} + 'h'" style="background: #e0e7ff; padding: 4px 8px; border-radius: 6px; color: #4338ca; font-size: 0.85rem;"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div th:if="${matriculas != null and matriculas.isEmpty()}" class="no-data">
+                <p>No hay alumnos registrados en este curso actualmente.</p>
+            </div>
+            
+            <div th:if="${matriculas == null}" class="no-data">
+                <p>Seleccione un curso para visualizar los alumnos matriculados.</p>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

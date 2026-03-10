@@ -50,7 +50,7 @@ public class EscuelaServiceImpl implements EscuelaService {
 	public boolean matricular(int codCurso, String dni) {
 		//Matricular un alumno en un curso es salvar un curso con su lista de alumnos en la que se incluye el nuevo alumno
 		if (cursosRepository.findById(codCurso).isPresent()&& alumnosRepository.findById(dni).isPresent()) {
-			cursosRepository.matricular(codCurso, dni);
+			cursosRepository.matricular(dni,codCurso);
 			return true;
 		}
 		return false;

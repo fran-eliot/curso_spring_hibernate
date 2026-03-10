@@ -38,11 +38,30 @@ public class Mapeador {
 	}
 	
 	public LibroDto libroEntityToDto(Libro libro) {
-		return new LibroDto(libro.getIsbn(), libro.getTitulo(), libro.getAutor(), libro.getPaginas(), libro.getPrecio(), libro.getTemaRelacionado().getTema());
+		if (libro == null) return null;
+		
+		String nombreTema = (libro.getTemaRelacionado() != null) 
+                ? libro.getTemaRelacionado().getTema() 
+                : "Sin tema";
+		
+		return new LibroDto(libro.getIsbn(), libro.getTitulo(), libro.getAutor(), 
+                libro.getPaginas(), libro.getPrecio(), nombreTema);
 	}
 	
 	public VentaDto ventaEntityToDto(Venta venta) {
-		return new VentaDto(clienteEntityToDto(venta.getCliente()), libroEntityToDto(venta.getLibro()), venta.getFecha());
+		if (venta == null) return null;
+
+	    // Verificamos el cliente
+	    ClienteDto clienteDto = (venta.getCliente() != null) 
+	                            ? clienteEntityToDto(venta.getCliente()) 
+	                            : null;
+
+	    // Verificamos el libro
+	    LibroDto libroDto = (venta.getLibro() != null) 
+	                        ? libroEntityToDto(venta.getLibro()) 
+	                        : null;
+
+	    return new VentaDto(clienteDto, libroDto, venta.getFecha());
 	}
 	
 	public Venta ventaDtoToEntity(VentaDto ventaDto) {

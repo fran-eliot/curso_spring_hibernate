@@ -14,6 +14,6 @@ public interface CursosRepository extends JpaRepository<Curso, Integer> {
 	@Transactional
 	@Modifying
 	@Query(value= "insert into matriculas values(?,?)",nativeQuery=true)
-	void matricular(int codCurso, String dni);
+	void matricular( String dni, int codCurso);
 
 }

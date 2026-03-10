@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Matrícula</title>
+    <link th:href="@{/css/estilos.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="container" style="max-width: 500px;">
+        <h2>Inscribir Alumno</h2>
+        
+        <div class="filter-section" style="flex-direction: column;">
+            <p th:if="${error}" th:text="${error}" style="color: #ef4444; margin-bottom: 1rem;"></p>
+
+            <form th:action="@{/matricular}" method="post" style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%;">
+                
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label><strong>DNI del Alumno:</strong></label>
+                    <input type="text" name="dni" placeholder="12345678X" required 
+                           style="padding: 0.6rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label><strong>Seleccionar Curso:</strong></label>
+                    <select name="codCurso" required>
+                        <option value="" disabled selected>— Seleccione un curso —</option>
+                        <option th:each="c : ${cursos}" 
+                                th:value="${c.codCurso}" 
+                                th:text="${c.nombreCurso}"></option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn-view" style="flex: 2;">Confirmar Matrícula</button>
+                    <a th:href="@{/}" class="btn-view" style="flex: 1; background-color: #64748b; text-decoration: none; text-align: center;">Volver</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
