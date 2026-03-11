@@ -26,15 +26,22 @@ public class AlumnosController {
 	@GetMapping(value="alumnos/{curso}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AlumnoDto>> alumnosCurso(@PathVariable("curso") String curso) {
 		List<AlumnoDto> alumnos = alumnosService.alumnosCurso(curso);
-
-		return new ResponseEntity<>(alumnos, HttpStatus.OK);
+		
+		if (alumnos!=null) {
+			return new ResponseEntity<>(alumnos, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(alumnos,HttpStatus.NOT_FOUND);
+		
 	}
 	
 	@GetMapping(value="alumnos",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AlumnoDto>> getAlumnos(){
 		List<AlumnoDto> alumnos = alumnosService.todosAlumnos();
 
-		return new ResponseEntity<>(alumnos, HttpStatus.OK);
+		if (alumnos!=null) {
+			return new ResponseEntity<>(alumnos, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(alumnos,HttpStatus.NOT_FOUND);
 	}
 	
 	@PostMapping(value="alumnos",consumes=MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +56,11 @@ public class AlumnosController {
 	@GetMapping(value="cursos",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<String>> getCursos(){
 		List<String> cursos = alumnosService.getCursos();
-		return new ResponseEntity<>(cursos,HttpStatus.OK);
+		if (cursos!=null) {
+			return new ResponseEntity<>(cursos, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(cursos,HttpStatus.NOT_FOUND);
+
 	}
 	
 	@DeleteMapping(value="alumnos/{email}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
