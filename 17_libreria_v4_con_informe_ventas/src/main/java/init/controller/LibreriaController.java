@@ -207,10 +207,19 @@ public class LibreriaController {
 	        @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaFin,
 	        Model model) {
 	    
-	    // Aquí NO uses parse. fechaInicio ya es un objeto LocalDateTime.
 	    List<VentaDto> ventas = ventasService.consultarVentas(fechaInicio, fechaFin);
+	    
+	    // Calculamos el total usando Stream API
+	    double totalIngresos = ventas.stream()
+	                                 .mapToDouble(v -> v.getLibro().getPrecio())
+	                                 .sum();
+	    
 	    model.addAttribute("ventas", ventas);
-	    return "informe";
+	    model.addAttribute("total", totalIngresos); // Nueva variable para la vista
+	    model.addAttribute("fechaInicio", fechaInicio); // Para mantener el valor en el input
+	    model.addAttribute("fechaFin", fechaFin);
+	    
+	    return "ventas";
 	}
 
 

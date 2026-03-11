@@ -1,128 +1,138 @@
 @charset "UTF-8";
+
 :root {
-    --primary-color: #4a90e2;
-    --secondary-color: #f5f7fa;
-    --text-color: #333;
-    --error-color: #e74c3c;
-    --success-color: #27ae60;
-    --border-radius: 8px;
-    --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-app: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --error: #ef4444;
+    --success: #10b981;
+    --border: #e2e8f0;
+    --radius: 8px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-main);
     margin: 0;
     padding: 2rem 1rem;
+    display: flex;
+    justify-content: center;
 }
 
+/* Contenedor base */
 .container {
-    background: white;
+    background: var(--bg-card);
     padding: 2rem;
-    border-radius: var(--border-radius);
+    border-radius: var(--radius);
     box-shadow: var(--shadow);
     width: 100%;
-    max-width: 800px; /* Ancho para tablas */
-    text-align: center;
+    max-width: 900px; /* Ideal para libros.html y ventas.html */
 }
 
-/* Para formularios como Login/Registro/Editar */
+/* Clase para pantallas pequeñas (Login, Registro, Editar) */
+/* Aplícala en el HTML como: <div class="container container-narrow"> */
 .container-narrow {
     max-width: 400px;
 }
 
-h1 {
+h1, h2 {
+    text-align: center;
+    color: var(--text-main);
     margin-bottom: 1.5rem;
-    color: var(--primary-color);
 }
 
+/* --- FORMULARIOS --- */
 form {
     display: flex;
     flex-direction: column;
-    text-align: left;
+    gap: 0.8rem;
 }
 
-label, strong {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
+label {
+    font-weight: 600;
     font-size: 0.9rem;
+    margin-bottom: -0.5rem;
 }
 
 input, select {
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
     font-size: 1rem;
 }
 
-input[type="submit"], button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.75rem;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s ease;
+input:focus {
+    outline: 2px solid var(--primary);
+    border-color: transparent;
 }
 
-.btn-edit { background-color: var(--success-color); }
-.btn-delete { background-color: var(--error-color); }
+/* --- BOTONES --- */
+button, input[type="submit"], .btn-view, .btn-buy {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.7rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.2s;
+}
 
-/* Tablas */
+button:hover, .btn-view:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-delete {
+    background-color: var(--error);
+}
+
+/* --- TABLAS --- */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1.5rem 0;
-}
-
-th, td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
+    margin-top: 1.5rem;
 }
 
 th {
-    background-color: #f8f9fa;
-    color: var(--primary-color);
+    background-color: #f1f5f9;
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
 }
 
-.actions-div {
-    display: flex;
-    gap: 5px;
+td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
 }
 
-.actions-div form { margin: 0; }
-.actions-div button { padding: 5px 10px; font-size: 0.8rem; }
-
-a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-size: 0.9rem;
+tr:hover {
+    background-color: #f8fafc;
 }
 
-a:hover { text-decoration: underline; }
-
-
+/* --- CARRITO (libros.html) --- */
 .cart-section {
-    margin-top: 40px;
-    padding: 20px;
-    background-color: #fcf3cf;
-    border-radius: 8px;
-    border: 1px solid #f39c12;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #fffbeb; /* Ambar muy claro */
+    border: 1px solid #fef3c7;
+    border-radius: var(--radius);
 }
-.cart-section h2 {
-    color: #e67e22;
-    margin-top: 0;
-}
-.total-row {
-    font-weight: bold;
-    background-color: #eee;
+
+/* --- MENSAJES (mensaje.html) --- */
+.message-box {
+    padding: 1.5rem;
+    background-color: #f0fdf4;
+    border: 1px solid #dcfce7;
+    border-radius: var(--radius);
+    color: #166534;
+    text-align: center;
 }

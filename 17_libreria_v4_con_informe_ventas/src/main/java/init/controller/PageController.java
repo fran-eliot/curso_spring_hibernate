@@ -15,5 +15,10 @@ public class PageController {
 	public String irRegistro() {
 		return "registro";
 	}
+	
+	@GetMapping("/irInformeVentas")
+	public String irInformeVentas() {
+	    return "ventas"; // Debe coincidir con el nombre del archivo HTML
+	}
 
 }

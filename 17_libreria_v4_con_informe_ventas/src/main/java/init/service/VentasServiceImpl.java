@@ -43,7 +43,7 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<VentaDto> consultarVentas(LocalDateTime f1, LocalDateTime f2) {
-		if (f1 == null || f2 == null) {
+		if (f1 == null || f2 == null || f1.isAfter(f2)) {
 	        return List.of(); 
 	    }
 

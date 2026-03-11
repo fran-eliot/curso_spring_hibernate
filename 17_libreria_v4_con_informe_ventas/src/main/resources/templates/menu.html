@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <div class="container" style="text-align: center;">
+    <div class="container container-narrow" style="text-align: center;">
         <h1>Bienvenido, <span th:text="${session.cliente.usuario}">Usuario</span></h1>
         <p>¿Qué desea hacer hoy?</p>
         
@@ -15,7 +15,7 @@
                 🛒 1. Ir a Comprar
             </a>
 
-            <a th:href="@{/informeVentas}" class="btn-buy" style="padding: 20px; text-decoration: none; border-radius: 8px; background-color: #2c3e50;">
+            <a th:href="@{/irInformeVentas}" class="btn-buy" style="padding: 20px; text-decoration: none; border-radius: 8px; background-color: #2c3e50;">
                 📊 2. Informe de Ventas
             </a>
         </div>
