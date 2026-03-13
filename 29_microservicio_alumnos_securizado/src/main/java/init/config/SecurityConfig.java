@@ -39,9 +39,9 @@ public class SecurityConfig {
 	public SecurityFilterChain filter(HttpSecurity http) throws Exception{
 		http.csrf(c->c.disable())
 		.authorizeHttpRequests(
-				aut->aut.requestMatchers(HttpMethod.POST, "/items").authenticated()
-				.requestMatchers(HttpMethod.DELETE, "/items").hasRole("ADMINS")
-				.requestMatchers(HttpMethod.PUT, "/items").hasAnyRole("ADMINS","OPERATORS")
+				aut->aut.requestMatchers(HttpMethod.GET, "/alumnos","/alumnos/**").authenticated()
+				.requestMatchers(HttpMethod.POST, "/alumnos").hasRole("ADMINS")
+				.requestMatchers(HttpMethod.DELETE, "/alumnos").hasAnyRole("ADMINS","OPERATORS")
 				.anyRequest().permitAll()
 				)
 		.httpBasic(Customizer.withDefaults());
