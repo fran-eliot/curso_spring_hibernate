@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: 40_microservicio_formacion_acceso_eureka
+server:
+  port: 9005
+  servlet:
+    context-path: /formacion
+remote:
+  url: http://servicio-alumnos/escuela/
+  user: admin
+  password: admin
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
