@@ -21,7 +21,7 @@ public class PedidosController {
     @Autowired
     PedidosService pedidosService;
     
-    @PostMapping(value = "pedidos", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "pedido", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> nuevoPedido(@RequestBody PedidoDto pedido, 
                                             @RequestHeader("Authorization") String token) {
         try {

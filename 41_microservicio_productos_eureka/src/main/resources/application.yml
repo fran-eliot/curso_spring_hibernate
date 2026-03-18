@@ -3,7 +3,7 @@
 # - The yaml file had comments which are lost in the refactoring!
 spring:
   application:
-    name: servicio_productos
+    name: servicio-productos
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/tiendavirtual?useSSL=false&serverTimezone=UTC

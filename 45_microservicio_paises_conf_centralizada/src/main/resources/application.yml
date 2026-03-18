@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: servicio-paises
+  config:
+    import: optional:configserver:http://localhost:8888
