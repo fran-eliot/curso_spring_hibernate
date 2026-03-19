@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: servicio-productos
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+server:
+  port: 8000
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/tiendaVirtual
+    username: root
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+db:
+  security:
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springsecurity
+    user: root
+    password: root
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    password: ${PASS_DB}
+    url: jdbc:mysql://${HOST_DB}:${PORT_DB}/tiendaVirtual
+    username: ${USER_DB}
+eureka:
+  instance:
+    hostname: ${HOST_PRODUCTOS}
+    non-secure-port: ${PORT_PRODUCTOS}
+  client:
+    service-url:
+      defaultZone: http://${HOST_EUREKA}:8761/eureka
+db:
+  security:
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${HOST_DB}:${PORT_DB}/springsecurity
+    user: ${USER_DB}
+    password: ${PASS_DB}

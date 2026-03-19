@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: servicio-pedidos
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+server:
+  port: 7000
+remote:
+ url: "http://servicio-productos/"
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/tiendaVirtual
+    username: root
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+remote:
+ user: admin
+ password: admin
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    password: ${PASS_DB}
+    url: jdbc:mysql://${HOST_DB}:${PORT_DB}/tiendaVirtual
+    username: ${USER_DB}
+eureka:
+  instance:
+    hostname: ${HOST_PEDIDOS}
+    non-secure-port: ${PORT_PEDIDOS}
+  client:
+    service-url:
+      defaultZone: http://${HOST_EUREKA}:8761/eureka
+remote:
+ user: ${REMOTE_USER}
+ password: ${REMOTE_PASS}
+
