@@ -1,0 +1,61 @@
+# --- CONFIGURACIÓN COMÚN (PARA TODOS LOS PERFILES) ---
+spring:
+  application:
+    name: servicio-alumnos
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+server:
+  port: 8005
+  servlet:
+    context-path: /escuela
+
+# Propiedades del Token (Comunes)
+jwt:
+  properties:
+    timeout: 500000
+    key: 13414515135413414jojoj11jja09ujaijf890qu901u90u1390u90ruq9
+
+---
+# --- PERFIL DE DESARROLLO (DEV) ---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/alumnoscursos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
+# Propiedades de seguridad personalizadas
+db:
+  security:
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springsecurity
+    user: root
+    pass: root
+
+---
+# --- PERFIL DE PRODUCCIÓN (PROD) ---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${HOST_DB}:${PORT_DB}/alumnoscursos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${USER_DB}
+    password: ${PASS_DB}
+
+# Propiedades de seguridad usando las mismas variables de entorno
+db:
+  security:
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${HOST_DB}:${PORT_DB}/springsecurity
+    user: ${USER_DB}
+    pass: ${PASS_DB}

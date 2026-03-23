@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paises-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paises
+  template:
+    metadata:
+      labels:
+        app: paises
+    spec:
+      containers:
+        - name: paises-container
+          image: imgpaises  # Usa la imagen Docker local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8500  # Puerto dentro del contenedor

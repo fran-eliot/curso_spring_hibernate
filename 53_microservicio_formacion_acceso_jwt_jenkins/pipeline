@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "imgformacion:latest"
+        CONTAINER_NAME = "formacion"
+		URL_PROJECT = "C:/SpringWS/proyectos/53_microservicio_formacion_acceso_jwt_jenkins"
+		APP_NAME="formacion"
+    }
+
+    stages {
+        stage('Build JAR') {
+            steps {
+                dir("${URL_PROJECT}") {
+                    bat 'C:/SpringWS/software/apache-maven-3.9.14-bin/apache-maven-3.9.14/bin/mvn clean package -DskipTests'
+                }
+            }
+        }
+		stage('Stop & Remove Container') {
+			steps {
+				bat "@docker rm -f %CONTAINER_NAME% 2>nul"
+			}
+		}
+
+        stage('Build Docker Image') {
+            steps {
+                dir("${URL_PROJECT}") {
+                    script {
+						echo "Eliminando imagen anterior si existe..."
+						bat "@docker rmi %DOCKER_IMAGE% 2>nul || exit 0"
+
+						echo "Construyendo nueva imagen..."
+						bat "@docker build -t %DOCKER_IMAGE% ."
+					}
+                }
+            }
+        }
+
+        stage('Imagen visible en kubernates') {
+			steps {
+				bat "@minikube image load %DOCKER_IMAGE%"
+			}
+		}
+		stage('Eliminar componentes kubernetes') {
+			steps {
+				bat "@kubectl delete pod,deploy,svc -l app=%APP_NAME%"
+			}
+		}
+		
+		stage('Despliegue kubernetes') {
+            steps {
+                dir("${URL_PROJECT}") {
+                    script {
+                        echo "Creando rol..."
+						bat "@kubectl apply -f role.yaml"
+						
+						echo "Realizando binding..."
+						bat "@kubectl apply -f rolebinding.yaml"
+						
+						echo "Realizando deployment..."
+						bat "@kubectl apply -f deployment.yaml"
+
+						echo "Creando servicio..."
+						bat "@kubectl apply -f service.yaml"
+					}
+                }
+            }
+        }
+
+    }
+}

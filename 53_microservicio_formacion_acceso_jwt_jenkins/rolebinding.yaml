@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-services-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: default   # o el ServiceAccount que use tu pod
+  namespace: default
+roleRef:
+  kind: Role
+  name: read-services
+  apiGroup: rbac.authorization.k8s.io

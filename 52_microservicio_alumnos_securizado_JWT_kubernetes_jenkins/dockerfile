@@ -1,0 +1,5 @@
+FROM openjdk:21-ea-jdk-slim
+COPY target/*.jar apps/alumnos.jar
+ENV HOST_DB=10.2.1.11
+ENV PORT_DB=3306
+ENTRYPOINT java -jar apps/alumnos.jar

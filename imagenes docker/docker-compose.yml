@@ -1,0 +1,17 @@
+services:
+  app_productos:
+    build: ./05_imagen_productos
+    ports:
+      - "8000:8000"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    env_file:
+      - .env
+  app_pedidos:
+    build: ./06_imagen_pedidos
+    ports:
+      - "7000:7000"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    env_file:
+      - .env

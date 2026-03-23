@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "imgpaises:latest"
+        CONTAINER_NAME = "paises"
+        URL_PROJECT = "C:/SpringWS/proyectos/51_microservicio_paises_docker_jenkins"
+    }
+
+    stages {
+        stage('Build JAR') {
+            steps {
+                dir("${URL_PROJECT}") {
+                    bat 'C:/SpringWS/software/apache-maven-3.9.14-bin/apache-maven-3.9.14/bin/mvn clean package -DskipTests'
+                }
+            }
+        }
+		stage('Stop & Remove Container') {
+			steps {
+				bat "@docker rm -f %CONTAINER_NAME% 2>nul"
+			}
+		}
+
+        stage('Build Docker Image') {
+            steps {
+                dir("${URL_PROJECT}") {
+                    script {
+						echo "Eliminando imagen anterior si existe..."
+						bat "@docker rmi %DOCKER_IMAGE% 2>nul || exit 0"
+
+						echo "Construyendo nueva imagen..."
+						bat "@docker build -t %DOCKER_IMAGE% ."
+					}
+                }
+            }
+        }
+
+        stage('Run Container') {
+			steps {
+				bat "@docker run -d --name %CONTAINER_NAME% -p 8500:8500 %DOCKER_IMAGE%"
+			}
+		}
+
+
+    }
+}

@@ -22,12 +22,14 @@ public class PaisesController {
 	// Ruta final: /restcountries/continentes
 	@GetMapping(value = "continentes")
 	public ResponseEntity<List<String>> getContinentes() {
+		System.out.println("Enviando contienntes...");
 		return ResponseEntity.ok(service.getContinentes());
 	}
 
 	// Ruta final: /restcountries/paises/{continente}
 	@GetMapping(value = "paises/{continente}", produces = "application/json")
 	public ResponseEntity<List<Pais>> getPaises(@PathVariable("continente") String continente) {
+		System.out.println("Enviando paisess...");
 		return ResponseEntity.ok(service.getPaisesPorContinente(continente));
 	}
 }

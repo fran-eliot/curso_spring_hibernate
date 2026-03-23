@@ -1,0 +1,9 @@
+services:
+  app_formacion:
+    build: ./04_imagen_formacion
+    ports:
+      - "9005:9005"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    env_file:
+      - .env

@@ -1,0 +1,70 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "imgalumnos:latest"
+        CONTAINER_NAME = "alumnos"
+        URL_PROJECT = "C:/SpringWS/proyectos/52_microservicio_alumnos_securizado_JWT_kubernetes_jenkins"
+        
+    }
+
+    stages {
+        stage('Build JAR') {
+            steps {
+                dir("${URL_PROJECT}") {
+                    bat 'C:/SpringWS/software/apache-maven-3.9.14-bin/apache-maven-3.9.14/bin/mvn clean package -DskipTests'
+                }
+            }
+        }
+		stage('Stop & Remove Container') {
+			steps {
+				bat "@docker rm -f %CONTAINER_NAME% 2>nul"
+			}
+		}
+
+        stage('Build Docker Image') {
+            steps {
+                dir("${URL_PROJECT}") {
+                    script {
+						echo "Eliminando imagen anterior si existe..."
+						bat "@docker rmi %DOCKER_IMAGE% 2>nul || exit 0"
+
+						echo "Construyendo nueva imagen..."
+						bat "@docker build -t %DOCKER_IMAGE% ."
+					}
+                }
+            }
+        }
+
+        stage('Push to Minikube') {
+            steps {
+                echo "Cargando imagen en el nodo de Minikube..."
+                // Este paso es el que permite que K8s vea la imagen local
+                bat "minikube image load ${DOCKER_IMAGE}"
+            }
+        }
+        
+        stage('Deploy to Kubernetes') {
+            steps {
+                dir("${URL_PROJECT}") {
+                    echo "Aplicando manifiestos..."
+                    // Asegúrate de poner la extensión .yaml o .yml
+                    bat "kubectl apply -f deployment.yaml"
+                    bat "kubectl apply -f service.yaml"
+                    
+                                   }
+            }
+        }
+        
+        stage('Verify Status') {
+            steps {
+                // Esperamos un poco a que el pod nuevo empiece a levantar
+                bat "kubectl get pods"
+                bat "kubectl get services"
+                
+            }
+        }
+
+
+    }
+}

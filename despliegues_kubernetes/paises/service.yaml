@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: paises-service
+spec:
+  selector:
+    app: paises #Nombre de los pods a gestionar
+  type: LoadBalancer  # Hace accesible el servicio desde fuera del clúster
+  ports:
+    - protocol: TCP
+      port: 8000      # Puerto del servicio en Kubernetes
+      targetPort: 8500 # Puerto del contenedor
+      nodePort: 30000   # Puerto en la máquina física (Minikube/Kubernetes lo expone aquí)

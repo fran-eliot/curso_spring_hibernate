@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: formacion-service
+spec:
+  selector:
+    app: formacion
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 10000      # Puerto del servicio
+      targetPort: 9005 # Puerto del microservicio (Spring Boot)
+      nodePort: 30001  # Puerto externo

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alumnos-service
+spec:
+  selector:
+    app: alumnos
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8005      # Puerto del servicio
+      targetPort: 8005 # Puerto del microservicio (Spring Boot)
+      nodePort: 30005  # Puerto externo
